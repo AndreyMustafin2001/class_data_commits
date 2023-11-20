@@ -1,5 +1,11 @@
 #include <iostream>
-
+#include <exception>
+class YearError {
+};
+class MonthOverload {
+};
+class DayOverload {
+};
 class Date {
 
     private:
@@ -12,6 +18,13 @@ class Date {
         return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
     }
     void Normalize() {
+     if (day < -2147483647 ) {
+        throw DayOverload();
+    }
+     if (month < -2147483647) {
+        throw MonthOverload();
+    }
+
 
     while (month > 12) {
             month -= 12;
@@ -48,9 +61,14 @@ class Date {
         if (month > 12) {
             month -= 12;
             year++;
+
         }
         maxDays = (month == 2) ? (isLeapYear(year) ? 29 : 28) :
              ((month == 4 || month == 6 || month == 9 || month == 11) ? 30 : 31);
+    }
+
+    if (year <= 0) {
+        throw YearError();
     }
 }
     public:
@@ -103,7 +121,7 @@ Date::Date(int y, int m, int d) {
     year = y;
     month = m;
     day = d;
-     Normalize();
+    Normalize();
 }
 
 Date::Date(int d) {
@@ -126,14 +144,23 @@ int Date::GetDay() const {
 }
 
 int main(){
-    Date dt1(19,60,70);
-    Date dt2(40000);
 
-    // dt2 += 50;
+    try {
+       Date dt1(34,-2147483647,214);
+       std::cout << dt1 << "\n";
+    } catch (const YearError&) {
+       std::cout << "Incorrect Year Error!" << "\n";
+    } catch (const MonthOverload&) {
+       std::cout << "Month Overload Error !" << "\n";
+    } catch (const DayOverload&) {
+       std::cout << "Day Overload Error!" << "\n";
+    }
+    //Date dt2(2147483646);
+
     // Date dt3 = dt1 - 50
     // Date dt3 = dt1 + 50;
+    // dt2 += 50;
     // std::cin >> dt1;
 
-    std::cout << dt1 << "\n";
-    std::cout << dt2 << "\n";
+    //std::cout << dt2 << "\n";
 }
