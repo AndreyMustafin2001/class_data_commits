@@ -63,7 +63,41 @@ class Date {
         int GetMonth() const;
         int GetDay() const;
 
+        Date& operator += (int d) {
+            day += d;
+            Normalize();
+            return *this;
+        }
+
+        Date operator+ (int d) const {
+            int daynew = day + d;
+            return Date(year, month, daynew);
+        }
+
+        Date operator- (int d) const {
+            int daynew = day - d;
+            return Date(year, month, daynew);
+        }
+
 };
+
+std::ostream& operator << (std::ostream& out, const Date& dt) {
+    out << dt.GetYear() << " year " << dt.GetMonth() << " month " << dt.GetDay() << " day " ;
+    return out;
+}
+
+std::istream& operator >> (std::istream& in, Date& date) {
+    int y, m, d;
+    char c;
+
+    in >> y >> c;
+    in >> m >> c;
+    in >> d;
+
+    date = Date(y, m, d);
+
+    return in;
+}
 
 Date::Date(int y, int m, int d) {
     year = y;
@@ -95,6 +129,11 @@ int main(){
     Date dt1(19,60,70);
     Date dt2(40000);
 
-    std::cout << dt1.GetYear() <<"." <<dt1.GetMonth() <<"." << dt1.GetDay() <<"\n";
-    std::cout << dt2.GetYear() <<"."<<dt2.GetMonth() << "."<< dt2.GetDay() << "\n";
+    // dt2 += 50;
+    // Date dt3 = dt1 - 50
+    // Date dt3 = dt1 + 50;
+    // std::cin >> dt1;
+
+    std::cout << dt1 << "\n";
+    std::cout << dt2 << "\n";
 }
